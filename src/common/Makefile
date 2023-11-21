@@ -1,9 +1,8 @@
 COMMON_CFLAGS := -m64 -fPIC -march=skylake -Wall -Wextra -Wvla -Wswitch-enum -Wno-missing-field-initializers -fdiagnostics-color=always
 DEBUG ?= 1
-LDLIBS += -lstdc++
 
 ifeq ($(DEBUG), 1)
-	COMMON_CFLAGS += -O0 -g -Wformat -Wformat-security
+	COMMON_CFLAGS += -O0 -g -Werror -Wformat -Wformat-security
 else
 	COMMON_CFLAGS += -O3 -DNDEBUG -UEDEBUG -UDEBUG
 endif
@@ -13,7 +12,7 @@ COMMON_CFLAGS := $(COMMON_CFLAGS)
 C_Files := crypto/shamir_secret_sharing/verifiable_secret_sharing.c crypto/paillier/paillier.c crypto/paillier/paillier_zkp.c crypto/GFp_curve_algebra/GFp_curve_algebra.c \
 				   crypto/commitments/commitments.c crypto/zero_knowledge_proof/schnorr.c crypto/zero_knowledge_proof/range_proofs.c crypto/zero_knowledge_proof/diffie_hellman_log.c \
 				   crypto/commitments/ring_pedersen.c crypto/ed25519_algebra/ed25519_algebra.c crypto/drng/drng.c crypto/keccak1600/keccak1600.c
-				   
+
 C_Objects := $(C_Files:.c=.o)
 
 Cpp_Files := cosigner/cosigner_exception.cpp cosigner/cmp_setup_service.cpp cosigner/cmp_offline_refresh_service.cpp cosigner/utils.cpp \

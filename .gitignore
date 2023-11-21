@@ -31,3 +31,6 @@
 *.out
 *.app
 
+# Test binaries
+*.test
+test
