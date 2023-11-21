@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  mpc:
+    build: .
+    container_name: mpc
+    restart: always
+    entrypoint: bash
+    working_dir: /mpc
+    volumes:
+      - .:/mpc
+    tty: true
