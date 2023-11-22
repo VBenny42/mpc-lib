@@ -33,4 +33,4 @@
 
 # Test binaries
 *.test
-test
+test/
