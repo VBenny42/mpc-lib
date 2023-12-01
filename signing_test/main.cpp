@@ -479,7 +479,7 @@ static void ecdsa_sign(
   char txid[37] = {0};
   uuid_generate_random(uid);
   uuid_unparse(uid, txid);
-  std::cout << "txid id = " << txid << std::endl;
+  // std::cout << "txid id = " << txid << std::endl;
 
   std::set<uint64_t> players_ids;
   std::set<std::string> players_str;
@@ -496,10 +496,12 @@ static void ecdsa_sign(
   }
   signing_data data;
   memcpy(data.chaincode, chaincode.data(), sizeof(HDChaincode));
-  for (size_t i = 0; i < count; i++)
+  for (int i = 0; i < count; i++)
   {
+    printf("\n------------Generating block------------\n\n");
     signing_block_data block;
     block.data.insert(block.data.begin(), 32, '0');
+    printf("block data: %s\n", HexStr(block.data).c_str());
     block.path = paths[i];
     data.blocks.push_back(block);
   }
@@ -532,6 +534,7 @@ static void ecdsa_sign(
       throw cosigner_exception(cosigner_exception::INVALID_PARAMETERS);
     }
     memcpy(msg, data.blocks[i].data.data(), sizeof(elliptic_curve256_scalar_t));
+    printf("\n------------Final obtained signature------------\n\n");
     std::cout << "sig r: "
               << HexStr(sigs[i].r,
                         &sigs[i].r[sizeof(elliptic_curve256_scalar_t)])
@@ -544,16 +547,17 @@ static void ecdsa_sign(
     PubKey derived_key;
     derive_public_key_generic(algebra.get(), derived_key, pubkey,
                               data.chaincode, paths[i].data(), paths[i].size());
-    std::cout << "derived public_key: "
+    std::cout << "Derived public key: "
               << HexStr(derived_key, &derived_key[sizeof(PubKey)]) << std::endl;
 
-    GFp_curve_algebra_verify_signature((GFp_curve_algebra_ctx_t *)algebra->ctx,
-                                       &derived_key, &msg, &sigs[i].r,
-                                       &sigs[i].s);
-    if (positive_r)
-    {
-      is_positive(sigs[i].r);
-    }
+    printf("\n------------Verifying signature------------\n\n");
+    printf("data: %s\n", HexStr(msg, &msg[sizeof(elliptic_curve256_scalar_t)])
+                             .c_str());
+    int status = GFp_curve_algebra_verify_signature((GFp_curve_algebra_ctx_t *)algebra->ctx,
+                                                    &derived_key, &msg, &sigs[i].r,
+                                                    &sigs[i].s);
+    if (status == 0)
+      printf("\n------------Signature verified-------------\n");
   }
 }
 
@@ -853,18 +857,24 @@ void add_user(players_setup_info &old_players, players_setup_info &new_players,
 
 int main(int argc, char **argv)
 {
+  int num_players;
+  printf("Enter number of players: ");
+  scanf("%d", &num_players);
   byte_vector_t chaincode(32, '\0');
   std::vector<uint32_t> path = {44, 0, 0, 0, 0};
   char keyid[37] = {0};
   elliptic_curve256_point_t pubkey;
   players_setup_info players;
 
+  std::cout << "------------Generating keyid and shares------------\n"
+            << std::endl;
   uuid_t uid;
   uuid_generate_random(uid);
   uuid_unparse(uid, keyid);
   players.clear();
-  players[11];
-  players[12];
+  for (int i = 0; i < num_players; i++)
+    players[i];
+
   create_secret(players, ECDSA_SECP256R1, keyid, pubkey);
 
   std::map<uint64_t, std::unique_ptr<offline_siging_info>> services;
@@ -874,24 +884,9 @@ int main(int argc, char **argv)
     services.emplace(i->first, move(info));
   }
 
+  std::cout << "\n------------Preprocessing signatures------------\n"
+            << std::endl;
   ecdsa_preprocess(services, keyid, 0, BLOCK_SIZE, BLOCK_SIZE);
-  ecdsa_sign(services, ECDSA_SECP256R1, keyid, 0, 1, pubkey, chaincode, {path});
 
-  char new_keyid[37] = {0};
-  uuid_generate_random(uid);
-  uuid_unparse(uid, new_keyid);
-  players_setup_info new_players;
-  new_players[21];
-  new_players[22];
-  new_players[23];
-  add_user(players, new_players, ECDSA_SECP256R1, keyid, new_keyid, pubkey);
-  std::map<uint64_t, std::unique_ptr<offline_siging_info>> new_services;
-  for (auto i = new_players.begin(); i != new_players.end(); ++i)
-  {
-    auto info = std::make_unique<offline_siging_info>(i->first, i->second);
-    new_services.emplace(i->first, move(info));
-  }
-  ecdsa_preprocess(new_services, new_keyid, 0, BLOCK_SIZE, BLOCK_SIZE);
-  ecdsa_sign(new_services, ECDSA_SECP256R1, new_keyid, 0, 1, pubkey, chaincode,
-             {path});
+  ecdsa_sign(services, ECDSA_SECP256R1, keyid, 0, 1, pubkey, chaincode, {path});
 }
