@@ -11,7 +11,7 @@
 #include <openssl/objects.h>
 
 const uint8_t SECP256K1_FIELD[] = {
-    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe,
     0xba, 0xae, 0xdc, 0xe6, 0xaf, 0x48, 0xa0, 0x3b, 0xbf, 0xd2, 0x5e, 0x8c, 0xd0, 0x36, 0x41, 0x41};
 
 const uint8_t SECP256R1_FIELD[] = {
@@ -19,25 +19,25 @@ const uint8_t SECP256R1_FIELD[] = {
     0xbc, 0xe6, 0xfa, 0xad, 0xa7, 0x17, 0x9e, 0x84, 0xf3, 0xb9, 0xca, 0xc2, 0xfc, 0x63, 0x25, 0x51};
 
 const uint8_t STARK_FIELD[] = {
-    0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+    0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xb7, 0x81, 0x12, 0x6d, 0xca, 0xe7, 0xb2, 0x32, 0x1e, 0x66, 0xa2, 0x41, 0xad, 0xc6, 0x4d, 0x2f};
 
 static const uint8_t STARK_P[] = {
-    0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+    0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
 
 static const uint8_t STARK_B[] = {
-    0x06, 0xf2, 0x14, 0x13, 0xef, 0xbe, 0x40, 0xde, 0x15, 0x0e, 0x59, 0x6d, 0x72, 0xf7, 0xa8, 0xc5, 
+    0x06, 0xf2, 0x14, 0x13, 0xef, 0xbe, 0x40, 0xde, 0x15, 0x0e, 0x59, 0x6d, 0x72, 0xf7, 0xa8, 0xc5,
     0x60, 0x9a, 0xd2, 0x6c, 0x15, 0xc9, 0x15, 0xc1, 0xf4, 0xcd, 0xfc, 0xb9, 0x9c, 0xee, 0x9e, 0x89};
 
 static const uint8_t STARK_GX[] = {
-    0x01, 0xef, 0x15, 0xc1, 0x85, 0x99, 0x97, 0x1b, 0x7b, 0xec, 0xed, 0x41, 0x5a, 0x40, 0xf0, 0xc7, 
+    0x01, 0xef, 0x15, 0xc1, 0x85, 0x99, 0x97, 0x1b, 0x7b, 0xec, 0xed, 0x41, 0x5a, 0x40, 0xf0, 0xc7,
     0xde, 0xac, 0xfd, 0x9b, 0x0d, 0x18, 0x19, 0xe0, 0x3d, 0x72, 0x3d, 0x8b, 0xc9, 0x43, 0xcf, 0xca};
 static const uint8_t STARK_GY[] = {
-    0x00, 0x56, 0x68, 0x06, 0x0a, 0xa4, 0x97, 0x30, 0xb7, 0xbe, 0x48, 0x01, 0xdf, 0x46, 0xec, 0x62, 
+    0x00, 0x56, 0x68, 0x06, 0x0a, 0xa4, 0x97, 0x30, 0xb7, 0xbe, 0x48, 0x01, 0xdf, 0x46, 0xec, 0x62,
     0xde, 0x53, 0xec, 0xd1, 0x1a, 0xbe, 0x43, 0xa3, 0x28, 0x73, 0x00, 0x0c, 0x36, 0xe8, 0xdc, 0x1f};
-    
-struct GFp_curve_algebra_ctx 
+
+struct GFp_curve_algebra_ctx
 {
     EC_GROUP *curve;
 };
@@ -96,7 +96,7 @@ GFp_curve_algebra_ctx_t *stark_algebra_ctx_new()
     y = BN_CTX_get(ctx);
     if (!p || !q || !b || !x || !y)
         goto cleanup;
-    
+
     if (!BN_bin2bn(STARK_P, sizeof(STARK_P), p))
         goto cleanup;
     if (!BN_bin2bn(STARK_FIELD, sizeof(STARK_FIELD), q))
@@ -163,7 +163,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_generator_mul_data(const GFp_cur
 
     if (!ctx || !data || !point || !data_len)
         return ELLIPTIC_CURVE_ALGEBRA_INVALID_PARAMETER;
-    
+
     memset(*point, 0, sizeof(elliptic_curve256_point_t));
     ecpoint = EC_POINT_new(ctx->curve);
     if (!ecpoint)
@@ -184,7 +184,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_generator_mul_data(const GFp_cur
     if (EC_POINT_mul(ctx->curve, ecpoint, exp, NULL, NULL, bn_ctx))
     {
         if (EC_POINT_point2oct(ctx->curve, ecpoint, POINT_CONVERSION_COMPRESSED, *point, sizeof(elliptic_curve256_point_t), bn_ctx) > 0)
-            ret = ELLIPTIC_CURVE_ALGEBRA_SUCCESS;          
+            ret = ELLIPTIC_CURVE_ALGEBRA_SUCCESS;
     }
 
 cleanup:
@@ -202,9 +202,9 @@ elliptic_curve_algebra_status GFp_curve_algebra_verify(const GFp_curve_algebra_c
 
     if (!result || !point)
         return ELLIPTIC_CURVE_ALGEBRA_INVALID_PARAMETER;
-    
+
     *result = 0;
-    
+
     ret = GFp_curve_algebra_generator_mul_data(ctx, data, data_len, &local_point);
     if (ret == ELLIPTIC_CURVE_ALGEBRA_SUCCESS)
         *result = CRYPTO_memcmp(local_point, point, sizeof(elliptic_curve256_point_t)) ? 0 : 1;
@@ -222,7 +222,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_verify_sum(const GFp_curve_algeb
 
     if (!ctx || !sum_point || !proof_points || !points_count || !result)
         return ELLIPTIC_CURVE_ALGEBRA_INVALID_PARAMETER;
-    
+
     *result = 0;
 
     p_proof = EC_POINT_new(ctx->curve);
@@ -250,7 +250,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_verify_sum(const GFp_curve_algeb
         goto cleanup;
     }
     BN_CTX_start(bn_ctx);
-    
+
     if (!EC_POINT_oct2point(ctx->curve, p_proof, *sum_point, SIZEOF_POINT(*sum_point), bn_ctx))
     {
         status = from_openssl_error(ERR_get_error());
@@ -267,14 +267,14 @@ elliptic_curve_algebra_status GFp_curve_algebra_verify_sum(const GFp_curve_algeb
         if (!EC_POINT_add(ctx->curve, point, point, tmp, bn_ctx))
             goto cleanup;
     }
-    
+
     ret = EC_POINT_cmp(ctx->curve, point, p_proof, bn_ctx);
     if (ret >= 0)
     {
         *result = (ret == 0);
         status = ELLIPTIC_CURVE_ALGEBRA_SUCCESS;
     }
-    
+
 cleanup:
     BN_CTX_end(bn_ctx);
     BN_CTX_free(bn_ctx);
@@ -284,8 +284,8 @@ cleanup:
     return status;
 }
 
-elliptic_curve_algebra_status GFp_curve_algebra_verify_linear_combination(const GFp_curve_algebra_ctx_t *ctx, const elliptic_curve256_point_t *sum_point, const elliptic_curve256_point_t *proof_points, const elliptic_curve256_scalar_t *coefficients, 
-    uint32_t points_count, uint8_t *result)
+elliptic_curve_algebra_status GFp_curve_algebra_verify_linear_combination(const GFp_curve_algebra_ctx_t *ctx, const elliptic_curve256_point_t *sum_point, const elliptic_curve256_point_t *proof_points, const elliptic_curve256_scalar_t *coefficients,
+                                                                          uint32_t points_count, uint8_t *result)
 {
     BN_CTX *bn_ctx = NULL;
     EC_POINT *p_proof = NULL;
@@ -298,14 +298,14 @@ elliptic_curve_algebra_status GFp_curve_algebra_verify_linear_combination(const 
 
     if (!ctx || !sum_point || !proof_points || !coefficients || !points_count || !result)
         return ELLIPTIC_CURVE_ALGEBRA_INVALID_PARAMETER;
-    
+
     *result = 0;
 
     bn_ctx = BN_CTX_new();
     if (!bn_ctx)
         return ELLIPTIC_CURVE_ALGEBRA_OUT_OF_MEMORY;
     BN_CTX_start(bn_ctx);
-    
+
     p_proof = EC_POINT_new(ctx->curve);
     if (!p_proof)
         goto cleanup;
@@ -315,10 +315,10 @@ elliptic_curve_algebra_status GFp_curve_algebra_verify_linear_combination(const 
         goto cleanup;
     }
 
-    points = (EC_POINT**)calloc(points_count, sizeof(EC_POINT*));
+    points = (EC_POINT **)calloc(points_count, sizeof(EC_POINT *));
     if (!points)
         goto cleanup;
-    
+
     for (size_t i = 0; i < points_count; ++i)
     {
         points[i] = EC_POINT_new(ctx->curve);
@@ -331,10 +331,10 @@ elliptic_curve_algebra_status GFp_curve_algebra_verify_linear_combination(const 
         }
     }
 
-    coeff = (BIGNUM**)calloc(points_count, sizeof(BIGNUM*));
+    coeff = (BIGNUM **)calloc(points_count, sizeof(BIGNUM *));
     if (!coeff)
         goto cleanup;
-    
+
     for (size_t i = 0; i < points_count; ++i)
     {
         coeff[i] = BN_CTX_get(bn_ctx);
@@ -347,19 +347,19 @@ elliptic_curve_algebra_status GFp_curve_algebra_verify_linear_combination(const 
     tmp = EC_POINT_new(ctx->curve);
     if (!zero || !tmp)
         goto cleanup;
-    if (!EC_POINTs_mul(ctx->curve, tmp, zero, points_count, (const EC_POINT**)points, (const BIGNUM**)coeff, bn_ctx))
+    if (!EC_POINTs_mul(ctx->curve, tmp, zero, points_count, (const EC_POINT **)points, (const BIGNUM **)coeff, bn_ctx))
     {
         status = ELLIPTIC_CURVE_ALGEBRA_UNKNOWN_ERROR;
         goto cleanup;
     }
-    
+
     ret = EC_POINT_cmp(ctx->curve, tmp, p_proof, bn_ctx);
     if (ret >= 0)
     {
         *result = (ret == 0);
         status = ELLIPTIC_CURVE_ALGEBRA_SUCCESS;
     }
-    
+
 cleanup:
     if (coeff)
     {
@@ -401,7 +401,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_add_points(const GFp_curve_algeb
 
     if (!ctx || !res || !p1 || !p2)
         return ELLIPTIC_CURVE_ALGEBRA_INVALID_PARAMETER;
-    
+
     p_p1 = EC_POINT_new(ctx->curve);
     if (!p_p1)
         return ELLIPTIC_CURVE_ALGEBRA_OUT_OF_MEMORY;
@@ -420,7 +420,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_add_points(const GFp_curve_algeb
         goto cleanup;
     }
     BN_CTX_start(bn_ctx);
-    
+
     if (!EC_POINT_oct2point(ctx->curve, p_p1, *p1, SIZEOF_POINT(*p1), bn_ctx))
     {
         status = from_openssl_error(ERR_get_error());
@@ -434,11 +434,11 @@ elliptic_curve_algebra_status GFp_curve_algebra_add_points(const GFp_curve_algeb
 
     if (!EC_POINT_add(ctx->curve, p_p1, p_p1, p_p2, bn_ctx))
         goto cleanup;
-    
+
     memset(*res, 0, sizeof(elliptic_curve256_point_t));
     if (EC_POINT_point2oct(ctx->curve, p_p1, POINT_CONVERSION_COMPRESSED, *res, sizeof(elliptic_curve256_point_t), bn_ctx) > 0)
         status = ELLIPTIC_CURVE_ALGEBRA_SUCCESS;
-    
+
 cleanup:
     BN_CTX_end(bn_ctx);
     BN_CTX_free(bn_ctx);
@@ -456,7 +456,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_point_mul(const GFp_curve_algebr
 
     if (!ctx || !res || !p || !exp)
         return ELLIPTIC_CURVE_ALGEBRA_INVALID_PARAMETER;
-    
+
     p_p = EC_POINT_new(ctx->curve);
     if (!p_p)
         return ELLIPTIC_CURVE_ALGEBRA_OUT_OF_MEMORY;
@@ -468,7 +468,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_point_mul(const GFp_curve_algebr
         goto cleanup;
     }
     BN_CTX_start(bn_ctx);
-    
+
     bn_exp = BN_CTX_get(bn_ctx);
     if (!bn_exp || !BN_bin2bn(*exp, sizeof(elliptic_curve256_scalar_t), bn_exp))
     {
@@ -484,11 +484,11 @@ elliptic_curve_algebra_status GFp_curve_algebra_point_mul(const GFp_curve_algebr
 
     if (!EC_POINT_mul(ctx->curve, p_p, NULL, p_p, bn_exp, bn_ctx))
         goto cleanup;
-    
+
     memset(*res, 0, sizeof(elliptic_curve256_point_t));
     if (EC_POINT_point2oct(ctx->curve, p_p, POINT_CONVERSION_COMPRESSED, *res, sizeof(elliptic_curve256_point_t), bn_ctx) > 0)
         status = ELLIPTIC_CURVE_ALGEBRA_SUCCESS;
-    
+
 cleanup:
     if (bn_exp)
         BN_clear(bn_exp);
@@ -498,7 +498,7 @@ cleanup:
     return status;
 }
 
-elliptic_curve_algebra_status GFp_curve_algebra_get_point_projection(const GFp_curve_algebra_ctx_t *ctx, elliptic_curve256_scalar_t *res, const elliptic_curve256_point_t *p, uint8_t* overflow)
+elliptic_curve_algebra_status GFp_curve_algebra_get_point_projection(const GFp_curve_algebra_ctx_t *ctx, elliptic_curve256_scalar_t *res, const elliptic_curve256_point_t *p, uint8_t *overflow)
 {
     BN_CTX *bn_ctx = NULL;
     EC_POINT *p_p = NULL;
@@ -508,7 +508,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_get_point_projection(const GFp_c
 
     if (!ctx || !res || !p)
         return ELLIPTIC_CURVE_ALGEBRA_INVALID_PARAMETER;
-    
+
     memset(*res, 0, sizeof(elliptic_curve256_scalar_t));
     p_p = EC_POINT_new(ctx->curve);
     if (!p_p)
@@ -522,7 +522,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_get_point_projection(const GFp_c
     }
 
     BN_CTX_start(bn_ctx);
-    
+
     X = BN_CTX_get(bn_ctx);
     if (!X)
     {
@@ -538,7 +538,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_get_point_projection(const GFp_c
 
     if (!EC_POINT_get_affine_coordinates_GFp(ctx->curve, p_p, X, NULL, bn_ctx))
         goto cleanup;
-    
+
     cmp = BN_cmp(X, EC_GROUP_get0_order(ctx->curve));
     if (overflow)
         *overflow = cmp >= 0;
@@ -547,9 +547,9 @@ elliptic_curve_algebra_status GFp_curve_algebra_get_point_projection(const GFp_c
     // See https://en.wikipedia.org/wiki/Hasse%27s_theorem_on_elliptic_curves
     if (cmp >= 0 && !BN_sub(X, X, EC_GROUP_get0_order(ctx->curve)))
         goto cleanup;
-    
+
     status = BN_bn2binpad(X, *res, sizeof(elliptic_curve256_scalar_t)) > 0 ? ELLIPTIC_CURVE_ALGEBRA_SUCCESS : ELLIPTIC_CURVE_ALGEBRA_UNKNOWN_ERROR;
-    
+
 cleanup:
     BN_CTX_end(bn_ctx);
     BN_CTX_free(bn_ctx);
@@ -566,7 +566,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_add_scalars(GFp_curve_algebra_ct
 
     if (!ctx || !res || !a || !a_len || !b || !b_len)
         return ELLIPTIC_CURVE_ALGEBRA_INVALID_PARAMETER;
-    
+
     bn_ctx = BN_CTX_new();
     if (!bn_ctx)
         return ELLIPTIC_CURVE_ALGEBRA_OUT_OF_MEMORY;
@@ -579,17 +579,17 @@ elliptic_curve_algebra_status GFp_curve_algebra_add_scalars(GFp_curve_algebra_ct
     bn_b = BN_CTX_get(bn_ctx);
     if (!bn_b || !BN_bin2bn(b, b_len, bn_b))
         goto cleanup;
-    
+
     BN_set_flags(bn_a, BN_FLG_CONSTTIME);
     BN_set_flags(bn_b, BN_FLG_CONSTTIME);
-    
+
     if (BN_mod_add(bn_a, bn_a, bn_b, EC_GROUP_get0_order(ctx->curve), bn_ctx))
     {
         ret = BN_bn2binpad(bn_a, *res, sizeof(elliptic_curve256_scalar_t)) > 0 ? ELLIPTIC_CURVE_ALGEBRA_SUCCESS : ELLIPTIC_CURVE_ALGEBRA_UNKNOWN_ERROR;
     }
     else
         ret = ELLIPTIC_CURVE_ALGEBRA_UNKNOWN_ERROR;
-    
+
 cleanup:
     if (bn_a)
         BN_clear(bn_a);
@@ -613,7 +613,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_sub_scalars(GFp_curve_algebra_ct
     bn_ctx = BN_CTX_new();
     if (!bn_ctx)
         return ELLIPTIC_CURVE_ALGEBRA_OUT_OF_MEMORY;
-    
+
     BN_CTX_start(bn_ctx);
 
     bn_a = BN_CTX_get(bn_ctx);
@@ -622,7 +622,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_sub_scalars(GFp_curve_algebra_ct
     bn_b = BN_CTX_get(bn_ctx);
     if (!bn_b || !BN_bin2bn(b, b_len, bn_b))
         goto cleanup;
-    
+
     BN_set_flags(bn_a, BN_FLG_CONSTTIME);
     BN_set_flags(bn_b, BN_FLG_CONSTTIME);
 
@@ -632,7 +632,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_sub_scalars(GFp_curve_algebra_ct
     }
     else
         ret = ELLIPTIC_CURVE_ALGEBRA_UNKNOWN_ERROR;
-    
+
 cleanup:
     if (bn_a)
         BN_clear(bn_a);
@@ -656,7 +656,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_mul_scalars(GFp_curve_algebra_ct
     bn_ctx = BN_CTX_new();
     if (!bn_ctx)
         return ELLIPTIC_CURVE_ALGEBRA_OUT_OF_MEMORY;
-    
+
     BN_CTX_start(bn_ctx);
 
     bn_a = BN_CTX_get(bn_ctx);
@@ -665,7 +665,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_mul_scalars(GFp_curve_algebra_ct
     bn_b = BN_CTX_get(bn_ctx);
     if (!bn_b || !BN_bin2bn(b, b_len, bn_b))
         goto cleanup;
-    
+
     BN_set_flags(bn_a, BN_FLG_CONSTTIME);
     BN_set_flags(bn_b, BN_FLG_CONSTTIME);
 
@@ -704,9 +704,9 @@ elliptic_curve_algebra_status GFp_curve_algebra_inverse(GFp_curve_algebra_ctx_t 
     bn_val = BN_CTX_get(bn_ctx);
     if (!bn_val || !BN_bin2bn(*val, sizeof(elliptic_curve256_scalar_t), bn_val))
         goto cleanup;
-    
+
     BN_set_flags(bn_val, BN_FLG_CONSTTIME);
-    
+
     if (BN_mod_inverse(bn_val, bn_val, EC_GROUP_get0_order(ctx->curve), bn_ctx))
     {
         ret = BN_bn2binpad(bn_val, *res, sizeof(elliptic_curve256_scalar_t)) > 0 ? ELLIPTIC_CURVE_ALGEBRA_SUCCESS : ELLIPTIC_CURVE_ALGEBRA_UNKNOWN_ERROR;
@@ -732,7 +732,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_abs(GFp_curve_algebra_ctx_t *ctx
 
     if (!ctx || !res || !val)
         return ELLIPTIC_CURVE_ALGEBRA_INVALID_PARAMETER;
-    
+
     field = EC_GROUP_get0_order(ctx->curve);
 
     bn_val = BN_new();
@@ -774,7 +774,7 @@ elliptic_curve_algebra_status GFp_curve_algebra_rand(GFp_curve_algebra_ctx_t *ct
 
     if (!ctx || !res)
         return ELLIPTIC_CURVE_ALGEBRA_INVALID_PARAMETER;
-    
+
     tmp = BN_new();
     if (!tmp)
         goto cleanup;
@@ -791,8 +791,8 @@ cleanup:
     return ret;
 }
 
-elliptic_curve_algebra_status GFp_curve_algebra_verify_signature(const GFp_curve_algebra_ctx_t *ctx, const elliptic_curve256_point_t *public_key, const elliptic_curve256_scalar_t *message, 
-    const elliptic_curve256_scalar_t *sig_r, const elliptic_curve256_scalar_t *sig_s)
+elliptic_curve_algebra_status GFp_curve_algebra_verify_signature(const GFp_curve_algebra_ctx_t *ctx, const elliptic_curve256_point_t *public_key, const elliptic_curve256_scalar_t *message,
+                                                                 const elliptic_curve256_scalar_t *sig_r, const elliptic_curve256_scalar_t *sig_s)
 {
     elliptic_curve_algebra_status ret = ELLIPTIC_CURVE_ALGEBRA_OUT_OF_MEMORY;
     BN_CTX *bn_ctx = NULL;
@@ -846,14 +846,14 @@ elliptic_curve_algebra_status GFp_curve_algebra_verify_signature(const GFp_curve
     /* u1 = m * s_inv mod order */
     if (!BN_mod_mul(u1, m, u2, order, bn_ctx))
         goto cleanup;
-    
+
     /* u2 = r * s_inv mod order */
     if (!BN_mod_mul(u2, r, u2, order, bn_ctx))
         goto cleanup;
-    
+
     if (!EC_POINT_mul(ctx->curve, point, u1, pubkey, u2, bn_ctx))
         goto cleanup;
-    
+
     if (!EC_POINT_get_affine_coordinates(ctx->curve, point, u1, NULL, bn_ctx))
         goto cleanup;
 
@@ -861,10 +861,10 @@ elliptic_curve_algebra_status GFp_curve_algebra_verify_signature(const GFp_curve
 
     if (cmp >= 0 && !BN_usub(u1, order, u1))
         goto cleanup;
-    
+
     /*  if the signature is correct u1 is equal to sig_r */
     cmp = BN_ucmp(u1, r);
-    
+
     // verify that s is positive
     if (!BN_lshift1(s, s))
         goto cleanup;
@@ -885,7 +885,7 @@ static int release(elliptic_curve256_algebra_ctx_t *ctx)
     {
         if (ctx->type != ELLIPTIC_CURVE_SECP256K1 && ctx->type != ELLIPTIC_CURVE_SECP256R1 && ctx->type != ELLIPTIC_CURVE_STARK)
             return 0;
-        GFp_curve_algebra_ctx_free((GFp_curve_algebra_ctx_t*)ctx->ctx);
+        GFp_curve_algebra_ctx_free((GFp_curve_algebra_ctx_t *)ctx->ctx);
         free(ctx);
     }
     return 1;
@@ -936,8 +936,8 @@ static elliptic_curve_algebra_status verify(const elliptic_curve256_algebra_ctx_
     return GFp_curve_algebra_verify(ctx->ctx, data, data_len, proof, result);
 }
 
-static elliptic_curve_algebra_status verify_linear_combination(const elliptic_curve256_algebra_ctx_t *ctx, const elliptic_curve256_point_t *proof, const elliptic_curve256_point_t *proof_points, 
-    const elliptic_curve256_scalar_t *coefficients, uint32_t points_count, uint8_t *result)
+static elliptic_curve_algebra_status verify_linear_combination(const elliptic_curve256_algebra_ctx_t *ctx, const elliptic_curve256_point_t *proof, const elliptic_curve256_point_t *proof_points,
+                                                               const elliptic_curve256_scalar_t *coefficients, uint32_t points_count, uint8_t *result)
 {
     if (!ctx || (ctx->type != ELLIPTIC_CURVE_SECP256K1 && ctx->type != ELLIPTIC_CURVE_SECP256R1 && ctx->type != ELLIPTIC_CURVE_STARK))
         return ELLIPTIC_CURVE_ALGEBRA_INVALID_PARAMETER;
@@ -1006,7 +1006,7 @@ static const struct bignum_st *order_internal(const elliptic_curve256_algebra_ct
 {
     if (ctx && (ctx->type == ELLIPTIC_CURVE_SECP256K1 || ctx->type == ELLIPTIC_CURVE_SECP256R1 || ctx->type == ELLIPTIC_CURVE_STARK))
     {
-        GFp_curve_algebra_ctx_t *ctx_ = (GFp_curve_algebra_ctx_t*)ctx->ctx;
+        GFp_curve_algebra_ctx_t *ctx_ = (GFp_curve_algebra_ctx_t *)ctx->ctx;
         return EC_GROUP_get0_order(ctx_->curve);
     }
     return NULL;
@@ -1015,9 +1015,9 @@ static const struct bignum_st *order_internal(const elliptic_curve256_algebra_ct
 static uint8_t in_field(const elliptic_curve256_scalar_t val, const uint8_t *field)
 {
     uint64_t cc = 0;
-    const uint32_t *ptr1 = (const uint32_t*)val;
-    const uint32_t *ptr2 = (const uint32_t*)field;
-    for (size_t i = sizeof(elliptic_curve256_scalar_t) / sizeof(uint32_t); i > 0; i --)
+    const uint32_t *ptr1 = (const uint32_t *)val;
+    const uint32_t *ptr2 = (const uint32_t *)field;
+    for (size_t i = sizeof(elliptic_curve256_scalar_t) / sizeof(uint32_t); i > 0; i--)
     {
         uint64_t v1 = __bswap_32(ptr1[i - 1]);
         uint64_t v2 = __bswap_32(ptr2[i - 1]);
@@ -1056,7 +1056,7 @@ static elliptic_curve_algebra_status ec_reduce_stark(const struct elliptic_curve
     return ret;
 }
 
-elliptic_curve256_algebra_ctx_t* elliptic_curve256_new_secp256k1_algebra()
+elliptic_curve256_algebra_ctx_t *elliptic_curve256_new_secp256k1_algebra()
 {
     elliptic_curve256_algebra_ctx_t *ctx = malloc(sizeof(elliptic_curve256_algebra_ctx_t));
     if (!ctx)
@@ -1084,7 +1084,7 @@ elliptic_curve256_algebra_ctx_t* elliptic_curve256_new_secp256k1_algebra()
     return ctx;
 }
 
-elliptic_curve256_algebra_ctx_t* elliptic_curve256_new_secp256r1_algebra()
+elliptic_curve256_algebra_ctx_t *elliptic_curve256_new_secp256r1_algebra()
 {
     elliptic_curve256_algebra_ctx_t *ctx = malloc(sizeof(elliptic_curve256_algebra_ctx_t));
     if (!ctx)
@@ -1112,7 +1112,7 @@ elliptic_curve256_algebra_ctx_t* elliptic_curve256_new_secp256r1_algebra()
     return ctx;
 }
 
-elliptic_curve256_algebra_ctx_t* elliptic_curve256_new_stark_algebra()
+elliptic_curve256_algebra_ctx_t *elliptic_curve256_new_stark_algebra()
 {
     elliptic_curve256_algebra_ctx_t *ctx = malloc(sizeof(elliptic_curve256_algebra_ctx_t));
     if (!ctx)
