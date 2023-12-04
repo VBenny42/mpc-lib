@@ -1,49 +1,17 @@
-# Fireblocks-MPC
+# CSCD71 Final Project - Fireblocks-MPC
 
-This repository contains Fireblocks' C++ implementation of Secure Multi Party Computation (MPC) algorithms for digital signatures. Covered algorithms include [MPC CMP](https://eprint.iacr.org/2020/492) for ECDSA signatures (online and offline variants), online EdDSA signatures and offline asymmetric EdDSA.
+By: Maaz Hashmi & Vinesh Benny
 
-It takes the form of a library (`libcosigner`) containing the algorithms and supporting cryptographic routines, as well as an extensive test suite also serving as an integration example.
+## On branch `main-signing`:
 
-## Quick Start
+- Run `sh run-docker.sh` to run the docker container
+- Inside the container, `cd signing-test` then do `make run`
+- This should run our test file `main.cpp`, found under `mpc/signing_test`
 
-### Prerequisites
+## On branch `python-verify`:
 
-This version of the code targets *Ubuntu Linux 20.04 LTS* release.
-The libraries and headers of the following dependencies are required:
-
-* OpenSSL version 1.1.1
-* libuuid (for tests)
-* libsecp256k1 (for tests, optional)
-
-All required dependencies can be installed with the command:
-```sh
-apt install build-essential libssl-dev uuid-dev libsecp256k1-dev
-```
-
-### Building and Testing
-
-Build the library and tests by running:
-```sh
-make
-```
-
-To execute the test suite, run the command:
-```sh
-make run-tests
-```
-
-## Usage
-
-A few examples for running a full signing process can be found in the [tests section](https://github.com/fireblocks/mpc-lib/tree/main/test/cosigner)
-
-## Security
-
-Please see our dedicated [security policy](SECURITY.md) page.
-
-## Contributing
-
-Contributions of code and ideas are welcome. Prior to opening a pull request, please carefully review our [contribution guidelines](CONTRIBUTING.md).
-
-## License
-
-The code in this repository is offered under the terms of the GNU General Public License, as described in the [LICENSE](LICENSE) file.
+- First we ran a test with 2 players as described above and got test signatures for `r`, `s` and the `derived_public_key` for our mock message.
+- Goal was to verify this signature using the `ecdsa` module in python.
+- There are two python files under `signing_test`: `verify.py` and `pubkey_verify.py` for the two approaches we took to try and verify our signature.
+- `verify.py` tries to verify the signature using our test information and the ecdsa module. But it outputs invalid signature so somethings not working.
+- `pubkey_verify.py` tries to use the `r` and `s` signatures from the test and the signed messaged to generate the `derived_pub_key`. It successfully generates a public key but this still doesn't match the public key in our test so something is not working here as well.
